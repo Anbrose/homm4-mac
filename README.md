@@ -117,7 +117,8 @@ install.sh          sets up Wine, the prefix, the game and the launcher
 src/fitwindow.c     the window-fitting helper, MIT licensed
 bin/fitwindow.exe   the same, prebuilt, so you don't need a cross-compiler
 tools/h4r.py        extracts the game's .h4r resource archives (format documented inside)
-tools/h4sprite.py   decodes actor_sequence sprites (creature/hero animations) to PNG
+tools/h4sprite.py   decodes sprites (creatures, heroes, map objects, spells) to PNG
+tools/h4terrain.py  decodes terrain tile sets to a PNG sheet
 docs/               how it works, and why
 ```
 
@@ -142,9 +143,10 @@ image format, documented in the script.
 python3 tools/h4sprite.py "out/actor_sequence/actor_sequence.Gold Golem.combat.walk.sw.h4d" golem/
 ```
 
-Sounds come out of `h4r.py` as `.wav`/`.mp3` and the Bink cutscenes play with
-ffmpeg. UI layers, fonts, terrain tiles and the town screens are still
-undecoded.
+`tools/h4terrain.py` writes a `terrain.*.h4d` tile set (100 diamonds: full
+tiles and transition pieces) as a 10×10 sheet. Sounds come out of `h4r.py` as
+`.wav`/`.mp3` and the Bink cutscenes play with ffmpeg. UI layers, fonts and
+the town screens are still undecoded.
 
 `fitwindow` is not specific to this game. It fits *any* Wine window to the macOS
 work area — point it at another old game and it will do the same thing. Rebuild it
