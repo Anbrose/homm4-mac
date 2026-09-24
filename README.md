@@ -119,6 +119,7 @@ bin/fitwindow.exe   the same, prebuilt, so you don't need a cross-compiler
 tools/h4r.py        extracts the game's .h4r resource archives (format documented inside)
 tools/h4sprite.py   decodes sprites (creatures, heroes, map objects, spells) to PNG
 tools/h4terrain.py  decodes terrain tile sets to a PNG sheet
+tools/h4map.py      decodes .h4c maps: header, objects, terrain grid -> JSON + minimap
 docs/               how it works, and why
 ```
 
@@ -145,7 +146,17 @@ python3 tools/h4sprite.py "out/actor_sequence/actor_sequence.Gold Golem.combat.w
 
 `tools/h4terrain.py` reassembles a `terrain.*.h4d` file — 100 diamond tiles
 that make up one ragged-edged patch of dirt, grass, lava, water, road… — into
-a single PNG. Sounds come out of `h4r.py` as
+a single PNG.
+
+`tools/h4map.py` opens a scenario (`maps/*.h4c`): the gzip container, the
+header (size, levels, players, name), every placed object with its map
+position, and the terrain grid — a diamond of cells inside the size×size
+square, each with a terrain type and variant. It writes a JSON and a minimap:
+
+```bash
+python3 tools/h4map.py ~/Games/HoMM4/prefix/drive_c/Games/HoMM4/Data/heroes4.h4r \
+    ~/Games/HoMM4/prefix/drive_c/Games/HoMM4/maps/"Three Queens.h4c" out/three_queens
+``` Sounds come out of `h4r.py` as
 `.wav`/`.mp3` and the Bink cutscenes play with ffmpeg. UI layers, fonts and
 the town screens are still undecoded.
 
