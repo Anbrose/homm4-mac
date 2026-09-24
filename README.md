@@ -138,7 +138,15 @@ cd native && swift build -c release
 ```
 
 Drag or scroll to pan, pinch to zoom, arrow keys to move; `--level 1` shows the
-underground, `--snapshot out.png` renders one frame to a file instead.
+underground, `--center x,y` starts on a map cell, `--snapshot out.png` renders
+one frame to a file instead. Random placeholders in the map (random towns,
+monsters, dwellings, resources, artifacts, shrines, scholars) are replaced by
+concrete objects the way the game does when a scenario starts — a random
+monster becomes a creature standing on the map (its `adv_actor` manifest names
+the `actor_sequence` to play), a random town becomes a faction town — chosen
+deterministically from the object's position, so a map always looks the same.
+`h4view heroes4.h4r --dump <entry>...` describes sprite entries (with
+`H4DUMP_DIR=dir` every image is written as PNG) for checking decoders.
 
 `tools/h4r.py` unpacks any `Data/*.h4r` archive into a folder tree — the Bink
 cutscenes come out playable with ffmpeg, the menu backgrounds come out as PNG,
