@@ -120,6 +120,7 @@ tools/h4r.py        extracts the game's .h4r resource archives (format documente
 tools/h4sprite.py   decodes sprites (creatures, heroes, map objects, spells) to PNG
 tools/h4terrain.py  decodes terrain tile sets to a PNG sheet
 tools/h4map.py      decodes .h4c maps: header, objects, terrain grid -> JSON + minimap
+tools/h4render.py   draws a whole map from the decoded terrain and object sprites
 docs/               how it works, and why
 ```
 
@@ -156,6 +157,15 @@ square, each with a terrain type and variant. It writes a JSON and a minimap:
 ```bash
 python3 tools/h4map.py ~/Games/HoMM4/prefix/drive_c/Games/HoMM4/Data/heroes4.h4r \
     ~/Games/HoMM4/prefix/drive_c/Games/HoMM4/maps/"Three Queens.h4c" out/three_queens
+```
+
+`tools/h4render.py` puts it all together and draws the map the way the game
+shows it — terrain tiles in the isometric grid, every object's sprite at its
+cell — into one big PNG (a few seconds for a small map, no dependencies):
+
+```bash
+python3 tools/h4render.py ~/Games/HoMM4/prefix/drive_c/Games/HoMM4/Data/heroes4.h4r out/ \
+    ~/Games/HoMM4/prefix/drive_c/Games/HoMM4/maps/"Three Queens.h4c" three_queens.png
 ``` Sounds come out of `h4r.py` as
 `.wav`/`.mp3` and the Bink cutscenes play with ffmpeg. UI layers, fonts and
 the town screens are still undecoded.
