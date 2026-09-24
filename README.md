@@ -143,8 +143,9 @@ image format, documented in the script.
 python3 tools/h4sprite.py "out/actor_sequence/actor_sequence.Gold Golem.combat.walk.sw.h4d" golem/
 ```
 
-`tools/h4terrain.py` writes a `terrain.*.h4d` tile set (100 diamonds: full
-tiles and transition pieces) as a 10×10 sheet. Sounds come out of `h4r.py` as
+`tools/h4terrain.py` reassembles a `terrain.*.h4d` file — 100 diamond tiles
+that make up one ragged-edged patch of dirt, grass, lava, water, road… — into
+a single PNG. Sounds come out of `h4r.py` as
 `.wav`/`.mp3` and the Bink cutscenes play with ffmpeg. UI layers, fonts and
 the town screens are still undecoded.
 
