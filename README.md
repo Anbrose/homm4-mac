@@ -116,7 +116,17 @@ an evening — are in **[docs/how-it-works.md](docs/how-it-works.md)**.
 install.sh          sets up Wine, the prefix, the game and the launcher
 src/fitwindow.c     the window-fitting helper, MIT licensed
 bin/fitwindow.exe   the same, prebuilt, so you don't need a cross-compiler
+tools/h4r.py        extracts the game's .h4r resource archives (format documented inside)
 docs/               how it works, and why
+```
+
+`tools/h4r.py` unpacks any `Data/*.h4r` archive into a folder tree — the Bink
+cutscenes come out playable with ffmpeg, the menu backgrounds come out as PNG,
+everything else as the game's internal `.h4d` objects:
+
+```bash
+python3 tools/h4r.py list    ~/Games/HoMM4/prefix/drive_c/Games/HoMM4/Data/heroes4.h4r actor_sequence.
+python3 tools/h4r.py extract ~/Games/HoMM4/prefix/drive_c/Games/HoMM4/Data/heroes4.h4r out/
 ```
 
 `fitwindow` is not specific to this game. It fits *any* Wine window to the macOS

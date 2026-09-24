@@ -86,6 +86,11 @@ else
 fi
 [ -f "$GAME_DIR/heroes4.exe" ] || die "heroes4.exe missing after copy"
 
+# Autosave silently does nothing unless this folder already exists — the game
+# won't create it itself. Manual saves are unaffected since they go through a
+# save dialog instead. See https://www.gog.com/forum/heroes_of_might_and_magic_series/homm4_autosave_failed
+mkdir -p "$GAME_DIR/games"
+
 if [ ! -f "$GAME_DIR/DDRAW.dll" ]; then
     printf '\nNOTE: no DDRAW.dll next to heroes4.exe.\n'
     printf 'The GOG build ships one (the Heroes4GL wrapper) and the launcher\n'
