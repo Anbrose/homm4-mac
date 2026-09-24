@@ -130,18 +130,21 @@ python3 tools/h4r.py list    ~/Games/HoMM4/prefix/drive_c/Games/HoMM4/Data/heroe
 python3 tools/h4r.py extract ~/Games/HoMM4/prefix/drive_c/Games/HoMM4/Data/heroes4.h4r out/
 ```
 
-`tools/h4sprite.py` turns one of the 11,000 `actor_sequence` files from that
-output into PNGs: every frame and shadow as RGBA with its 4-bit alpha, a
-`strip.png` of the whole animation, and `meta.json` with each image's position
-on the 800×600 combat canvas. The palette-indexed, span-encoded format is
-documented in the script.
+`tools/h4sprite.py` turns a sprite file from that output into PNGs: every
+frame and shadow as RGBA with its 4-bit alpha, a `strip.png` of the whole
+animation, and `meta.json` with each image's bounding box. It handles the
+11,000 `actor_sequence` creature and hero animations, the `adv_object`
+adventure-map objects (towns, mines, dwellings), `combat_object` obstacles and
+most `animation` spell effects — they share one palette-indexed, span-encoded
+image format, documented in the script.
 
 ```bash
 python3 tools/h4sprite.py "out/actor_sequence/actor_sequence.Gold Golem.combat.walk.sw.h4d" golem/
 ```
 
 Sounds come out of `h4r.py` as `.wav`/`.mp3` and the Bink cutscenes play with
-ffmpeg. UI layers, fonts, terrain and map objects are still undecoded.
+ffmpeg. UI layers, fonts, terrain tiles and the town screens are still
+undecoded.
 
 `fitwindow` is not specific to this game. It fits *any* Wine window to the macOS
 work area — point it at another old game and it will do the same thing. Rebuild it
