@@ -121,8 +121,24 @@ tools/h4sprite.py   decodes sprites (creatures, heroes, map objects, spells) to 
 tools/h4terrain.py  decodes terrain tile sets to a PNG sheet
 tools/h4map.py      decodes .h4c maps: header, objects, terrain grid -> JSON + minimap
 tools/h4render.py   draws a whole map from the decoded terrain and object sprites
+native/             Swift package: the same decoders in Swift plus a Metal map viewer
 docs/               how it works, and why
 ```
+
+## Native viewer
+
+`native/` is the start of a native macOS/iOS client (Swift, Metal, no Wine).
+`H4Engine` reads the game's archives, sprites, terrain, transition masks and
+maps straight from your GOG install; `h4view` shows a map at 60 fps:
+
+```bash
+cd native && swift build -c release
+.build/release/h4view ~/Games/HoMM4/prefix/drive_c/Games/HoMM4/Data/heroes4.h4r \
+    ~/Games/HoMM4/prefix/drive_c/Games/HoMM4/maps/"Three Queens.h4c"
+```
+
+Drag or scroll to pan, pinch to zoom, arrow keys to move; `--level 1` shows the
+underground, `--snapshot out.png` renders one frame to a file instead.
 
 `tools/h4r.py` unpacks any `Data/*.h4r` archive into a folder tree — the Bink
 cutscenes come out playable with ffmpeg, the menu backgrounds come out as PNG,
