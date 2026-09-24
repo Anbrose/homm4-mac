@@ -121,6 +121,8 @@ tools/h4sprite.py   decodes sprites (creatures, heroes, map objects, spells) to 
 tools/h4terrain.py  decodes terrain tile sets to a PNG sheet
 tools/h4map.py      decodes .h4c maps: header, objects, terrain grid -> JSON + minimap
 tools/h4render.py   draws a whole map from the decoded terrain and object sprites
+tools/h4layers.py   decodes UI screens (layers.*.h4d: frames, panels, buttons, hotspots) to PNG
+tools/h4font.py     decodes the game fonts and renders text with them
 native/             Swift package: the same decoders in Swift plus a Metal map viewer
 docs/               how it works, and why
 ```
@@ -147,6 +149,13 @@ the `actor_sequence` to play), a random town becomes a faction town — chosen
 deterministically from the object's position, so a map always looks the same.
 `h4view heroes4.h4r --dump <entry>...` describes sprite entries (with
 `H4DUMP_DIR=dir` every image is written as PNG) for checking decoders.
+
+The viewer is turning into the game: a hero of the leftmost town's alignment
+stands at its gate; click a cell to see the route (the game's green/red
+arrows), click again to walk it; pickups are taken from the neighbouring
+cell; bridges are crossed end to end. The game's own 1024x768 adventure
+screen is drawn around the map — frame, right panel, resource numbers, day
+scroll, minimap — and the End Turn button (or Return) starts the next day.
 
 `tools/h4r.py` unpacks any `Data/*.h4r` archive into a folder tree — the Bink
 cutscenes come out playable with ffmpeg, the menu backgrounds come out as PNG,
