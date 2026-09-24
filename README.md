@@ -160,8 +160,10 @@ python3 tools/h4map.py ~/Games/HoMM4/prefix/drive_c/Games/HoMM4/Data/heroes4.h4r
 ```
 
 `tools/h4render.py` puts it all together and draws the map the way the game
-shows it — terrain tiles in the isometric grid, every object's sprite at its
-cell — into one big PNG (a few seconds for a small map, no dependencies):
+shows it — terrain tiles in the isometric grid, the transitions between
+terrains and the roads through the game's own 1-bit masks
+(`transition.Transitions.h4d`), every object's sprite at its cell — into one
+big PNG (a few seconds for a small map, no dependencies):
 
 ```bash
 python3 tools/h4render.py ~/Games/HoMM4/prefix/drive_c/Games/HoMM4/Data/heroes4.h4r out/ \
