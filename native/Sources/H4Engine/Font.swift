@@ -20,7 +20,7 @@ public final class H4Font {
             var q = start
             var list: [Glyph] = []
             while q + 16 <= d.count {
-                let w = Int(r.peekU32(at: q)), h = Int(r.peekU32(at: q + 4)), adv = Int(r.peekU32(at: q + 12))
+                let w = Int(r.peekU32(at: q)), h = Int(r.peekU32(at: q + 4)), adv = Int(Int32(bitPattern: UInt32(truncatingIfNeeded: r.peekU32(at: q + 12))))
                 guard h == size, w <= 64, q + 16 + w * h <= d.count else { break }
                 list.append(Glyph(width: w, height: h, advance: adv, alpha: Array(d[(d.startIndex + q + 16)..<(d.startIndex + q + 16 + w * h)])))
                 q += 16 + w * h

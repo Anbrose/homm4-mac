@@ -342,7 +342,7 @@ if let out = snapshot {
     renderer.combat = combatScreen
     renderer.movies = movies
     if let m = ProcessInfo.processInfo.environment["H4SAVEDIALOG"] { renderer.openSaveDialog(m == "load" ? .load : .save) }   // snapshot the save / load dialog
-    if ProcessInfo.processInfo.environment["H4MENU"] != nil { renderer.openSystemMenu() }   // snapshot the system menu
+    if let m = ProcessInfo.processInfo.environment["H4MENU"] { if m == "game" { renderer.openGameMenu() } else if m == "info" { Renderer.scenarioInfoOpen = true } else { renderer.openSystemMenu() } }   // snapshot the system menu (game: the game menu, info: scenario information)
     if walk != nil { game.quickCombatOnly = true }   // --walk snapshots resolve fights at once
     if let a = ProcessInfo.processInfo.environment["H4ARMY"], let h = game.heroes.first {   // debugging: the hero's army, "devil:5,imp:20"
         h.army = a.split(separator: ",").compactMap { p in let q = p.split(separator: ":"); return q.count == 2 ? Int(q[1]).map { Hero.Stack(creature: String(q[0]), count: $0) } : nil }
@@ -446,7 +446,7 @@ if let out = snapshot {
         print("puzzle \(first.subtype): \(game.obeliskVisits[first.subtype] ?? 0)/\(game.obelisksRequired(first.subtype)) site \(game.digSites[first.subtype] ?? [])")
     }
     if ProcessInfo.processInfo.environment["H4OPTIONS"] != nil { renderer.optionsOpen = renderer.settings }   // snapshot: the options
-    if let m = ProcessInfo.processInfo.environment["H4OVERVIEW"] { renderer.overview = KingdomOverview(mode: m == "heroes" ? .heroes : .towns) }   // snapshot: the kingdom overview
+    if let m = ProcessInfo.processInfo.environment["H4OVERVIEW"] { renderer.overview = KingdomOverview(snapshot: m) }   // snapshot: the kingdom overview (towns, heroes, armies)
     if let spec = ProcessInfo.processInfo.environment["H4NEUTRAL"] {   // snapshot: a neutral army's window ("creature:n,creature:n")
         let stacks = spec.split(separator: ",").compactMap { p -> (CreatureDef, Int)? in let q = p.split(separator: ":"); guard q.count == 2, let c = game.tables?.creature(String(q[0])), let n = Int(q[1]) else { return nil }; return (c, n) }
         if let lead = stacks.first { renderer.creatureDialog = (lead.0, lead.1, stacks.dropFirst().map { ($0.0, $0.1) }) }
