@@ -342,7 +342,7 @@ if let out = snapshot {
     renderer.combat = combatScreen
     renderer.movies = movies
     if let m = ProcessInfo.processInfo.environment["H4SAVEDIALOG"] { renderer.openSaveDialog(m == "load" ? .load : .save) }   // snapshot the save / load dialog
-    if ProcessInfo.processInfo.environment["H4MENU"] != nil { renderer.openSystemMenu() }   // snapshot the system menu
+    if let m = ProcessInfo.processInfo.environment["H4MENU"] { if m == "game" { renderer.openGameMenu() } else if m == "info" { Renderer.scenarioInfoOpen = true } else { renderer.openSystemMenu() } }   // snapshot the system menu (game: the game menu, info: scenario information)
     if walk != nil { game.quickCombatOnly = true }   // --walk snapshots resolve fights at once
     if let a = ProcessInfo.processInfo.environment["H4ARMY"], let h = game.heroes.first {   // debugging: the hero's army, "devil:5,imp:20"
         h.army = a.split(separator: ",").compactMap { p in let q = p.split(separator: ":"); return q.count == 2 ? Int(q[1]).map { Hero.Stack(creature: String(q[0]), count: $0) } : nil }
@@ -445,7 +445,7 @@ if let out = snapshot {
         print("puzzle \(first.subtype): \(game.obeliskVisits[first.subtype] ?? 0)/\(game.obelisksRequired(first.subtype)) site \(game.digSites[first.subtype] ?? [])")
     }
     if ProcessInfo.processInfo.environment["H4OPTIONS"] != nil { renderer.optionsOpen = renderer.settings }   // snapshot: the options
-    if let m = ProcessInfo.processInfo.environment["H4OVERVIEW"] { renderer.overview = KingdomOverview(mode: m == "heroes" ? .heroes : .towns) }   // snapshot: the kingdom overview
+    if let m = ProcessInfo.processInfo.environment["H4OVERVIEW"] { renderer.overview = KingdomOverview(snapshot: m) }   // snapshot: the kingdom overview (towns, heroes, armies)
     if let k = ProcessInfo.processInfo.environment["H4ARMYPOPUP"].flatMap({ Int($0) }) { renderer.armyPopup = ArmyPopup(hero: 0, selected: k) }   // snapshot: the right-click window
     if openChest, let h = game.heroes.first { game.chestOffer = (h, 1500, 1000); renderer.adventureDialog = .chest; renderer.chestChoice = true }
     if openTown {
