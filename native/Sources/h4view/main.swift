@@ -412,6 +412,7 @@ if let out = snapshot {
         }
     }
     if openHeroScreen { renderer.adventureDialog = .hero(0); renderer.heroShown = ProcessInfo.processInfo.environment["H4SLOT"].flatMap { Int($0) } ?? 0 }
+    if let k = ProcessInfo.processInfo.environment["H4SPLIT"].flatMap({ Int($0) }), let h = game.heroes.first, k < h.army.count { renderer.openSplit(h, stack: k, at: (560, 560)) }   // snapshot: the split dialog
     if let n = ProcessInfo.processInfo.environment["H4LEVELUP"].flatMap({ Int($0) }), let h = game.heroes.first {   // snapshot: the level-up dialog
         game.giveExperience(n, to: h); renderer.levelUpChoice = 0
     }
@@ -627,6 +628,10 @@ final class MapView: MTKView {
     var hoverPending: (mouse: SIMD2<Float>, since: Date)?
     func tickHover() {
         guard let p = hoverPending, Date().timeIntervalSince(p.since) > 0.4, renderer.hover == nil, renderer.townOpen == nil else { return }
+        if let tip = renderer.dialogTip(x: p.mouse.x / renderer.uiScale, y: p.mouse.y / renderer.uiScale) {   // the object dialogs' balloons
+            renderer.hover = (tip, Int(p.mouse.x / renderer.uiScale), Int(p.mouse.y / renderer.uiScale))
+            return
+        }
         if renderer.spellBook != nil {
             if let tip = renderer.spellBookTip(x: p.mouse.x / renderer.uiScale, y: p.mouse.y / renderer.uiScale) {
                 renderer.hover = (tip, Int(p.mouse.x / renderer.uiScale), Int(p.mouse.y / renderer.uiScale))
@@ -671,6 +676,11 @@ final class MapView: MTKView {
     }
     override func mouseDragged(with e: NSEvent) {
         dragged += abs(Float(e.deltaX)) + abs(Float(e.deltaY))
+        if splitDialog != nil {   // the split dialog's scrollbar follows the pointer
+            let p = convert(e.locationInWindow, from: nil), sc = Float(window?.backingScaleFactor ?? 1)
+            renderer.splitClick(x: Float(p.x) * sc / renderer.uiScale, y: Float(bounds.height - p.y) * sc / renderer.uiScale, drag: true)
+            return
+        }
         if renderer.townOpen != nil {
             if dragged >= 4 {
                 let p = convert(e.locationInWindow, from: nil), sc = Float(window?.backingScaleFactor ?? 1)
@@ -694,6 +704,7 @@ final class MapView: MTKView {
         let p = convert(e.locationInWindow, from: nil)
         let scale = Float(window?.backingScaleFactor ?? 1)
         let mouse = SIMD2(Float(p.x) * scale, Float(bounds.height - p.y) * scale)
+        if splitDialog != nil { renderer.splitClick(x: mouse.x / renderer.uiScale, y: mouse.y / renderer.uiScale); return }
         if renderer.puzzle != nil { renderer.puzzleClick(x: mouse.x / renderer.uiScale, y: mouse.y / renderer.uiScale); return }
         if renderer.shop != nil { renderer.shopClick(x: mouse.x / renderer.uiScale, y: mouse.y / renderer.uiScale); return }
         if renderer.sanctuary != nil { renderer.sanctuaryClick(x: mouse.x / renderer.uiScale, y: mouse.y / renderer.uiScale); return }
@@ -830,6 +841,7 @@ final class MapView: MTKView {
     }
     override func keyDown(with e: NSEvent) {
         if renderer.saveDialogKey(e) { return }
+        if renderer.dialogKey(e.keyCode) { return }   // the spell book's and the object dialogs' hot keys
         let step: Float = 64 / renderer.zoom
         // the original's hot keys on the map: S save, L load
         if !renderer.inCombat, renderer.townOpen == nil, renderer.prompt == nil {
