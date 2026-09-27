@@ -125,6 +125,7 @@ extension Renderer {
             else if inside(d["ok_button"], at: ox, oy, x, y), let c = chestChoice { g.resolveChest(gold: c); chestChoice = nil; adventureDialog = nil }
             return true
         case .hero(let i):
+            if armySplitClick(i, x: x, y: y) { return true }   // the split button: the split dialog
             let ox = (AdventureUI.width - 800) / 2, oy = (AdventureUI.height - 600) / 2
             // a ring shows that hero or stack
             if let d = ui.dialog("army.layout"), i < g.heroes.count {

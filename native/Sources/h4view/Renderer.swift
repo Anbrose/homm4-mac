@@ -552,6 +552,7 @@ final class Renderer: NSObject, MTKViewDelegate {
         out += shopQuads()
         out += sanctuaryQuads()
         out += levelUpQuads()
+        out += splitQuads()
         out += choiceQuads()
         out += messageBoxQuads()
         out += saveDialogQuads()
