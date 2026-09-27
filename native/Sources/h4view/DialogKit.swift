@@ -20,10 +20,7 @@ extension Renderer {
     /// 0x875bc0: the largest cached size no larger than `n` (9 ... 34), as the even Prose Antique file at or under it.
     func dFont(_ n: Int) -> H4Font? {
         guard let ui = ui else { return nil }
-        let cached = [9, 11, 12, 14, 16, 18, 20, 23, 25, 27, 29, 30, 33, 34]   // table 0xa84798
-        let v = cached.last { $0 <= n } ?? 9
-        let s = min(32, max(10, v - v % 2))   // the Prose_Antique files come in even sizes (34 and 36 do not parse yet)
-        return ui.font(s)
+        return ui.font(n)   // the slot table 0xa84798 and its resources (AdventureUI.fontSlots)
     }
     /// font.Script.<n> (14, 16, 18, 20).
     func scriptFont(_ n: Int) -> H4Font? {

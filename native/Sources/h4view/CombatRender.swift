@@ -12,8 +12,7 @@ extension Renderer {
     /// is the largest no bigger than it (9 -> Prose_Antique.10, 23 -> .24, 30 -> .32).
     static let proseHeights = [9, 11, 12, 14, 16, 18, 20, 23, 25, 27, 29, 30, 33, 34]
     func proseFont(_ n: Int) -> H4Font {
-        let k = Renderer.proseHeights.lastIndex { $0 <= n } ?? 0
-        return ui!.font(10 + 2 * k)
+        ui!.font(n)   // 0x875bc0's slot table (AdventureUI.fontSlots)
     }
     /// A text window (t_text_window 0x8859f0): word-wrapped to its width, left or centred
     /// (+0xc4), top-aligned or centred vertically as a block (+0xd4); black unless told, the halo

@@ -16,7 +16,7 @@ public final class H4Font {
         let r = ByteReader(d)
         size = Int(r.byte(at: 3)); lineHeight = Int(r.byte(at: 4)); ascent = Int(r.byte(at: 5))
         var found: [Glyph]? = nil
-        for start in 11..<min(400, d.count) where found == nil {
+        for start in 11..<min(2000, d.count) where found == nil {
             var q = start
             var list: [Glyph] = []
             while q + 16 <= d.count {
