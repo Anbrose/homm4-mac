@@ -446,6 +446,10 @@ if let out = snapshot {
     }
     if ProcessInfo.processInfo.environment["H4OPTIONS"] != nil { renderer.optionsOpen = renderer.settings }   // snapshot: the options
     if let m = ProcessInfo.processInfo.environment["H4OVERVIEW"] { renderer.overview = KingdomOverview(mode: m == "heroes" ? .heroes : .towns) }   // snapshot: the kingdom overview
+    if let spec = ProcessInfo.processInfo.environment["H4NEUTRAL"] {   // snapshot: a neutral army's window ("creature:n,creature:n")
+        let stacks = spec.split(separator: ",").compactMap { p -> (CreatureDef, Int)? in let q = p.split(separator: ":"); guard q.count == 2, let c = game.tables?.creature(String(q[0])), let n = Int(q[1]) else { return nil }; return (c, n) }
+        if let lead = stacks.first { renderer.creatureDialog = (lead.0, lead.1, stacks.dropFirst().map { ($0.0, $0.1) }) }
+    }
     if let k = ProcessInfo.processInfo.environment["H4ARMYPOPUP"].flatMap({ Int($0) }) { renderer.armyPopup = ArmyPopup(hero: 0, selected: k) }   // snapshot: the right-click window
     if openChest, let h = game.heroes.first { game.chestOffer = (h, 1500, 1000); renderer.adventureDialog = .chest; renderer.chestChoice = true }
     if openTown {
